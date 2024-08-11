@@ -4,7 +4,7 @@
 from bookshelf.models import Book
 
 # Retrieve the book you want to delete
-retrieved_book = Book.objects.get(title="Nineteen Eighty-Four")
+retrieved_book = Book.objects.get(title="1984")
 
 # Delete the book
 retrieved_book.delete()
