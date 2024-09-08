@@ -38,3 +38,25 @@ This API handles CRUD operations for the Book model using Django REST Framework'
 
 ## Testing
 Use Postman or curl to manually test each endpoint. Confirm that permissions are enforced and that the views behave as expected.
+
+
+# API Features: Filtering, Searching, and Ordering
+
+## Overview
+The Book API allows users to filter, search, and order the list of books, enhancing data accessibility and usability.
+
+### Filtering
+- You can filter books by title, author name, or publication year.
+- **Example**: `/api/books/?title=1984` filters books with the title "1984".
+
+### Searching
+- Search functionality is enabled on the title and author fields.
+- **Example**: `/api/books/?search=Python` finds books with "Python" in the title or author’s name.
+
+### Ordering
+- Order results by title or publication year.
+- **Example**: `/api/books/?ordering=publication_year` sorts books by their publication year.
+
+### Combined Usage
+- You can combine filtering, searching, and ordering in a single request.
+- **Example**: `/api/books/?search=Harry&ordering=-publication_year` searches for books with "Harry" and orders them by publication year in descending order.
