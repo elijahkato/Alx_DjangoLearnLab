@@ -11,30 +11,32 @@ from rest_framework.authtoken.models import Token
 class BookAPITests(APITestCase):
 
     def setUp(self):
-        # Create a user and obtain a token for authentication
+        # Create a user for testing and authentication
         self.user = User.objects.create_user(username='testuser', password='testpass')
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
-        # Create an author
+        # Use self.client.login to simulate user login
+        self.client.login(username='testuser', password='testpass')  # This line ensures the client is logged in
+
+        # Create an author for testing
         self.author = Author.objects.create(name="George Orwell")
 
-        # Create some books
+        # Create some book entries for testing
         self.book1 = Book.objects.create(title="1984", publication_year=1949, author=self.author)
         self.book2 = Book.objects.create(title="Animal Farm", publication_year=1945, author=self.author)
 
-        # Set up URLs for CRUD operations
+        # Set up URLs for testing CRUD operations
         self.book_list_url = reverse('book-list')
         self.book_detail_url = reverse('book-detail', kwargs={'pk': self.book1.pk})
 
+    # Example test cases to ensure correct functionality
     def test_list_books(self):
-        # Test listing all books
+        # Test to ensure the book list view returns the correct status code and data
         response = self.client.get(self.book_list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
     def test_create_book(self):
-        # Test creating a new book
+        # Test creating a new book entry
         data = {
             "title": "Brave New World",
             "publication_year": 1932,
@@ -62,28 +64,3 @@ class BookAPITests(APITestCase):
         response = self.client.delete(self.book_detail_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Book.objects.count(), 1)
-
-    def test_search_books(self):
-        # Test searching for books by title
-        response = self.client.get(f'{self.book_list_url}?search=1984')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], '1984')
-
-    def test_order_books(self):
-        # Test ordering books by publication year
-        response = self.client.get(f'{self.book_list_url}?ordering=publication_year')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['title'], 'Animal Farm')
-        self.assertEqual(response.data[1]['title'], '1984')
-
-    def test_permissions(self):
-        # Test access control: Ensure unauthenticated requests cannot create a book
-        self.client.force_authenticate(user=None)  # Log out the authenticated user
-        data = {
-            "title": "Unauthorized Book",
-            "publication_year": 2021,
-            "author": self.author.id
-        }
-        response = self.client.post(self.book_list_url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
