@@ -1,5 +1,6 @@
 # api/views.py
 from rest_framework import generics, permissions, status
+from django_filters import rest_framework
 from .models import Book
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
