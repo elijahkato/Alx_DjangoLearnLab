@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProfileUpdateForm
 from django.utils.decorators import method_decorator
 from django.db.models import Q
+from taggit.models import Tag
 
 def profile_view(request):
     if request.method == 'POST':  # Check if the request is a POST request
@@ -141,3 +142,20 @@ def search_view(request):
         ).distinct()
 
     return render(request, 'blog/search_results.html', {'results': results, 'query': query})
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'  # Reuse the post list template
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        # Retrieve the tag from the URL slug and filter posts by this tag
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        return Post.objects.filter(tags__in=[tag])
+    
+    def get_context_data(self, **kwargs):
+        # Pass the tag to the context for display in the template
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.kwargs.get('tag_slug')
+        return context
