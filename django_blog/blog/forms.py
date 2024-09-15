@@ -10,7 +10,7 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'tags']  # Include tags field
         widgets = {
-            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'}),  # Use TagWidget for tags input
+            'tags': TagWidget(),  
         }
 
 class PostForm(forms.ModelForm):
