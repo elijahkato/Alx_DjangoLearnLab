@@ -9,6 +9,10 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content']  # Include the fields that users can edit
 
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
 
 # Custom registration form
 class CustomUserCreationForm(UserCreationForm):
@@ -17,9 +21,3 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
-
-# Profile update form
-class ProfileUpdateForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'email']

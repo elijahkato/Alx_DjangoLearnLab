@@ -78,9 +78,9 @@ DATABASES = {
     
        'default': {
         'ENGINE': 'django.db.backends.mysql',  # Use MySQL backend
-        'NAME': 'kato',
+        'NAME': 'django_blog_db',
         'USER': 'kato',
-        'PASSWORD': '123',
+        'PASSWORD': 'Nathan@21356',
         'HOST': 'localhost',  # Change to your host if different
         'PORT': '3306',  # Default MySQL port
     }

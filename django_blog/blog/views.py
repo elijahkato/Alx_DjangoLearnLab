@@ -4,6 +4,40 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from .models import Post
 from .forms import PostForm
+from django.contrib.auth.models import User
+from .forms import CustomUserCreationForm, ProfileUpdateForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import ProfileUpdateForm
+
+def profile_view(request):
+    if request.method == 'POST':  # Check if the request is a POST request
+        form = ProfileUpdateForm(request.POST, instance=request.user)  # Pass the logged-in user to update their details
+        if form.is_valid():  # Validate the form data
+            form.save()  # Save the updated user information
+            return redirect('profile')  # Redirect back to the profile page after saving
+    else:
+        form = ProfileUpdateForm(instance=request.user)  # Display the form with the current user data
+
+    return render(request, 'blog/profile.html', {'form': form})
+
+
+# Custom Registration View
+class RegisterView(CreateView):
+    form_class = CustomUserCreationForm
+    template_name = 'blog/register.html'
+    success_url = '/login/'  # Redirect to login after registration
+
+# Profile Management View
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = ProfileUpdateForm
+    template_name = 'blog/profile.html'
+    success_url = '/profile/'  # Redirect to the profile page after update
+
+    def get_object(self):
+        # Only allow the logged-in user to update their profile
+        return self.request.user
 
 # ListView to display all blog posts
 class PostListView(ListView):
