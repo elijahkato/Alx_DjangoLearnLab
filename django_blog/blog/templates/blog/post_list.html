@@ -1,11 +1,17 @@
+<!-- blog/templates/blog/post_list.html -->
 {% extends "base.html" %}
+
 {% block content %}
-<h1>Blog Posts</h1>
+<h1>All Blog Posts</h1>
 <a href="{% url 'post-create' %}" class="btn btn-primary">Create New Post</a>
 <ul>
     {% for post in posts %}
     <li>
         <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a> - {{ post.published_date }}
+        {% if user == post.author %}
+        <a href="{% url 'post-edit' post.pk %}" class="btn btn-secondary">Edit</a>
+        <a href="{% url 'post-delete' post.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
     </li>
     {% empty %}
     <p>No posts available.</p>
