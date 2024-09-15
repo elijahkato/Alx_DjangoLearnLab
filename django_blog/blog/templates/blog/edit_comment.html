@@ -1,0 +1,12 @@
+<!-- blog/templates/blog/edit_comment.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit Comment</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Update Comment</button>
+</form>
+<a href="{% url 'post-detail' comment.post.pk %}">Back to Post</a>
+{% endblock %}
