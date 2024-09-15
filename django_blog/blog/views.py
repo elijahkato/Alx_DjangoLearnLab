@@ -127,9 +127,11 @@ class CommentDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post-detail', kwargs={'pk': self.object.post.pk})
+
+
 def search_view(request):
     query = request.GET.get('q')
-    results = Post.objects.none()  # Initialize empty queryset
+    results = Post.objects.none()  # Start with an empty queryset
 
     if query:
         results = Post.objects.filter(
