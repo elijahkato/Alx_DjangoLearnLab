@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileUpdateForm
 from django.utils.decorators import method_decorator
+from django.db.models import Q
 
 def profile_view(request):
     if request.method == 'POST':  # Check if the request is a POST request
@@ -126,3 +127,15 @@ class CommentDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post-detail', kwargs={'pk': self.object.post.pk})
+def search_view(request):
+    query = request.GET.get('q')
+    results = Post.objects.none()  # Initialize empty queryset
+
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})

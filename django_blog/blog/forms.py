@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']  # Include the fields that users can edit
+        fields = ['title', 'content', 'tags']  # Include the fields that users can edit
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
