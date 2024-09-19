@@ -131,6 +131,7 @@ env.bak/
 venv.bak/
 .DjangoLearn
 DjangoLearn/
+SEMS/
 
 
 # Spyder project settings
