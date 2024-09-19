@@ -7,8 +7,7 @@ from django.contrib.auth import get_user_model
 from .serializers import UserSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 
-
-CustomeUser = get_user_model()
+CustomUser = get_user_model()
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -17,6 +16,6 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token, created = Token.objects.get_or_create(user=user)
+            token = Token.objects.create(user=user)
             return Response({'token': token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
