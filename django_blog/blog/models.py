@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
+from django.urls import reverse
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
@@ -11,6 +12,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+            # Redirect to the detail view of the post after creation or update
+            return reverse('post-detail', kwargs={'pk': self.pk})
     
 
 class Comment(models.Model):

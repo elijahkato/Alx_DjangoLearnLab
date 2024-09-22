@@ -44,14 +44,14 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 # ListView to display all blog posts
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'blog/post_list.html'  # Template for displaying the list of posts
     context_object_name = 'posts'
     ordering = ['-published_date']  # Orders posts by date (most recent first)
 
 # DetailView to display individual post details
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'blog/post_detail.html'  # Template for displaying a single post
 

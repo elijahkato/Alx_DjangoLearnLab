@@ -1,0 +1,79 @@
+<!-- blog/templates/blog/base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Django Blog{% endblock %}</title>
+    <!-- Bootstrap CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: Add custom CSS file if needed -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'post-list' %}">Django Blog</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'post-create' %}">New Post</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profile' %}">{{ user.username }}</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="container mt-4">
+        {% block content %}
+        <!-- Content from child templates will be inserted here -->
+        {% endblock %}
+    </div>
+
+    <!-- Optional Search Form: Shown Only to Authenticated Users -->
+    {% if user.is_authenticated %}
+    <div class="container mt-3">
+        <form action="{% url 'search' %}" method="get" class="d-flex">
+            <input type="text" name="q" class="form-control me-2" placeholder="Search posts..." required>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    {% endif %}
+
+     {% if user.is_authenticated %}
+                        <form action="{% url 'search' %}" method="get" class="d-flex">
+                            <input class="form-control me-2" type="search" name="q" placeholder="Search posts..." aria-label="Search" required>
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    {% endif %}
+
+    <!-- Bootstrap Bundle JS from CDN (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Optional: Add custom JS file if needed -->
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>
