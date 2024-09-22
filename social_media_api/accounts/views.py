@@ -19,7 +19,7 @@ class FollowUserView(generics.GenericAPIView):
 
 # View for unfollowing a user
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
         user_to_unfollow = get_object_or_404(CustomUser.objects.all(), id=user_id)
